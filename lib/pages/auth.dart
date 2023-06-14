@@ -183,7 +183,9 @@ class _AuthPageState extends State<AuthPage> {
                             const SizedBox(height: 20),
                             ElevatedButton(
                               onPressed: () {
-                                if (formKey.currentState!.validate()) {}
+                                if (formKey.currentState!.validate()) {
+                                  loginUser();
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                   fixedSize: const Size(250, 60),

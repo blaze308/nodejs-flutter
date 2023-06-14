@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:second/services/auth_service.dart';
 import '../widgets/large_text.dart';
 import '../widgets/medium_text.dart';
 import '../widgets/price_text.dart';
@@ -14,6 +15,7 @@ class SingleProduct extends StatefulWidget {
 }
 
 class _SingleProductState extends State<SingleProduct> {
+  AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +95,7 @@ class _SingleProductState extends State<SingleProduct> {
             child: Padding(
               padding: const EdgeInsets.only(top: 10, left: 10),
               child: MediumText(
-                  text: widget.snapshot.data[widget.index]["description"],
+                  text: widget.snapshot.data[widget.index]["desc"],
                   maxLines: 7),
             ),
           ),
@@ -101,87 +103,87 @@ class _SingleProductState extends State<SingleProduct> {
             padding: const EdgeInsets.only(top: 20, left: 10),
             child: LargeText(text: "Similar and Related Products "),
           ),
-          // FutureBuilder(
-          //   future: PostGres.getCategory(
-          //       widget.snapshot.data[widget.index]["category"]),
-          //   builder: (context, AsyncSnapshot snapshot) {
-          //     if (snapshot.connectionState == ConnectionState.waiting) {
-          //       return const Center(
-          //         child: CircularProgressIndicator.adaptive(),
-          //       );
-          //     } else if (snapshot.hasData) {
-          //       return SingleChildScrollView(
-          //         child: Padding(
-          //           padding: const EdgeInsets.all(10),
-          //           child: GridView.builder(
-          //             physics: const NeverScrollableScrollPhysics(),
-          //             shrinkWrap: true,
-          //             gridDelegate:
-          //                 const SliverGridDelegateWithMaxCrossAxisExtent(
-          //               maxCrossAxisExtent: 200,
-          //               crossAxisSpacing: 10,
-          //               childAspectRatio: 2 / 2.8,
-          //               mainAxisSpacing: 15,
-          //             ),
-          //             itemCount: snapshot.data.length,
-          //             itemBuilder: (context, index) {
-          //               return GestureDetector(
-          //                 onTap: () {
-          //                   Navigator.of(context).push(MaterialPageRoute(
-          //                     builder: (context) => SingleProduct(
-          //                         snapshot: snapshot, index: index),
-          //                   ));
-          //                 },
-          //                 child: Container(
-          //                   decoration: BoxDecoration(
-          //                       color: Colors.white,
-          //                       borderRadius: BorderRadius.circular(5),
-          //                       boxShadow: const [
-          //                         BoxShadow(color: Colors.grey, blurRadius: 2)
-          //                       ]),
-          //                   child: Column(
-          //                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //                     children: [
-          //                       Padding(
-          //                         padding: const EdgeInsets.only(left: 10),
-          //                         child: Align(
-          //                             alignment: Alignment.centerLeft,
-          //                             child: MediumText(
-          //                                 text: snapshot.data[index]["title"])),
-          //                       ),
-          //                       SizedBox(
-          //                         height: 150,
-          //                         width: double.maxFinite,
-          //                         child: Image.network(
-          //                           snapshot.data[index]["image"],
-          //                           fit: BoxFit.cover,
-          //                         ),
-          //                       ),
-          //                       Padding(
-          //                         padding: const EdgeInsets.only(right: 10),
-          //                         child: Align(
-          //                           alignment: Alignment.centerRight,
-          //                           child: PriceText(
-          //                               text:
-          //                                   "GHC ${snapshot.data[index]["price"]}"
-          //                                       .toString()),
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               );
-          //             },
-          //           ),
-          //         ),
-          //       );
-          //     } else {
-          //       return const Center(
-          //         child: Text("error😣: Data Not Found"),
-          //       );
-          //     }
-          //   },
-          // )
+          FutureBuilder(
+            future: authService
+                .fetchCategory(widget.snapshot.data[widget.index]["category"]),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              } else if (snapshot.hasData) {
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 200,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 2 / 2.8,
+                        mainAxisSpacing: 15,
+                      ),
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => SingleProduct(
+                                  snapshot: snapshot, index: index),
+                            ));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: const [
+                                  BoxShadow(color: Colors.grey, blurRadius: 2)
+                                ]),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: MediumText(
+                                          text: snapshot.data[index]["title"])),
+                                ),
+                                SizedBox(
+                                  height: 150,
+                                  width: double.maxFinite,
+                                  child: Image.network(
+                                    snapshot.data[index]["image"],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 10),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: PriceText(
+                                        text:
+                                            "GHC ${snapshot.data[index]["price"]}"
+                                                .toString()),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: Text("error😣: Data Not Found"),
+                );
+              }
+            },
+          )
         ],
       ),
     );

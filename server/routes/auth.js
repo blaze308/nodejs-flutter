@@ -1,10 +1,32 @@
 const express = require("express");
 const User = require("../models/user");
 const bcrypt = require("bcrypt")
+const Product = require("../models/product")
 const jwt = require("jsonwebtoken")
 
 const authRouter = express.Router();
 
+
+
+//get 
+authRouter.get("/api/data", async (req, res) => {
+    try {
+        const products = await Product.find().sort({_id : -1});
+        res.json(products)
+    } catch (error) {
+        res.status(500).json({error: "Error fetching products"})
+    }
+})
+
+//get by category
+authRouter.get("/api/data/category/:category", async (req, res) => {
+    try {
+        const products = await Product.find({category: req.params.category});
+        res.json(products)
+    } catch (error) {
+        res.status(500).json({error: "Error fetching products"})
+    }
+})
 
 //signup
 authRouter.post("/api/signup", async (req, res) => {

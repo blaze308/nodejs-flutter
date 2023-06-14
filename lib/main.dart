@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:second/backend/mongodb.dart';
-import 'package:second/backend/product_model.dart';
+import 'package:second/models/product.dart';
+import 'package:second/services/auth_service.dart';
+import 'package:second/widgets/app_bar.dart';
 import 'package:second/widgets/large_text.dart';
+import 'package:second/widgets/nav_drawer.dart';
 
 import 'pages/add_product.dart';
 import 'pages/single_product.dart';
@@ -24,10 +26,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: const MyAppBar(),
+      drawer: const NavDrawer(),
       body: ListView(
         children: [
           Padding(
@@ -37,7 +41,7 @@ class _MyAppState extends State<MyApp> {
                 child: LargeText(text: "Awesome Products to use in Eternity")),
           ),
           FutureBuilder(
-            future: MongoDatabase.getData(),
+            future: authService.fetchData(),
             builder: (context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -79,7 +83,7 @@ class _MyAppState extends State<MyApp> {
                                         child: MediumText(
                                             text: Product.fromJson(
                                                     snapshot.data[index])
-                                                .price
+                                                .title
                                                 .toString())),
                                   ),
                                   SizedBox(
@@ -97,8 +101,7 @@ class _MyAppState extends State<MyApp> {
                                       alignment: Alignment.centerRight,
                                       child: PriceText(
                                           text:
-                                              "GHC ${Product.fromJson(snapshot.data[index]).price.toString()}"
-                                                  .toString()),
+                                              "GHC ${Product.fromJson(snapshot.data[index]).price.toString()}"),
                                     ),
                                   )
                                 ],
