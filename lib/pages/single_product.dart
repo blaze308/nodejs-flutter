@@ -4,6 +4,7 @@ import '../widgets/large_text.dart';
 import '../widgets/medium_text.dart';
 import '../widgets/price_text.dart';
 import '../widgets/app_bar.dart';
+import 'package:badges/badges.dart' as badges;
 
 class SingleProduct extends StatefulWidget {
   const SingleProduct({required this.snapshot, required this.index, super.key});
@@ -59,22 +60,30 @@ class _SingleProductState extends State<SingleProduct> {
                       color: Color(0xFF869013)),
                 ),
               ),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.remove_circle,
-                            color: Colors.redAccent, size: 25)),
-                    const Badge(
-                      child: Icon(Icons.shopping_cart, color: Colors.blueGrey),
-                    ),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.add_circle,
-                            color: Colors.greenAccent, size: 25)),
-                  ]),
+              Expanded(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.remove_circle,
+                              color: Colors.redAccent, size: 25)),
+                      const badges.Badge(
+                        badgeContent: Text("3"),
+                        badgeStyle: badges.BadgeStyle(badgeColor: Colors.white),
+                        child: Icon(
+                          Icons.shopping_cart,
+                          color: Colors.blue,
+                          size: 30,
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.add_circle,
+                              color: Colors.greenAccent, size: 25)),
+                    ]),
+              ),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: ElevatedButton(

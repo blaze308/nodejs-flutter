@@ -38,8 +38,10 @@ const userSchema = mongoose.Schema({
     type: {
         type: String,
         default: "user",
-    }
-    //cart
+    },
+    // cart: [
+    //   {  product: productSchema }
+    // ]
 })
 
 const User = mongoose.model("User", userSchema);

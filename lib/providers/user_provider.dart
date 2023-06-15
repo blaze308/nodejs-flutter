@@ -3,7 +3,7 @@ import 'package:second/models/user.dart';
 
 class UserProvider extends ChangeNotifier {
   User _user = User(
-      id: "id",
+      id: "",
       email: "",
       username: "",
       password: "",

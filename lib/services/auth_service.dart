@@ -1,7 +1,9 @@
-import 'dart:convert';
+// ignore_for_file: use_build_context_synchronously, duplicate_ignore
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:second/main.dart';
 import 'package:second/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:second/providers/user_provider.dart';
@@ -33,7 +35,6 @@ class AuthService {
           },
           body: user.toJson());
 
-      // ignore: use_build_context_synchronously
       httpErrorHandler(
           response: res,
           context: context,
@@ -48,8 +49,7 @@ class AuthService {
 
   void loginUser({
     required BuildContext context,
-    required String email,
-    required String username,
+    required String identifier,
     required String password,
   }) async {
     try {
@@ -59,8 +59,7 @@ class AuthService {
             "Content-Type": "application/json; charset=UTF-8"
           },
           body: jsonEncode({
-            "email": email,
-            "username": username,
+            "identifier": identifier,
             "password": password,
           }));
 
@@ -70,10 +69,11 @@ class AuthService {
           context: context,
           onSuccess: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString("tokenKey", jsonDecode(res.body)["token"]);
-
-            // ignore: use_build_context_synchronously
             Provider.of<UserProvider>(context, listen: false).setUser(res.body);
+            await prefs.setString("tokenKey", jsonDecode(res.body)["token"]);
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => const MyApp()));
+            showSnackBar(context, "You are now logged in");
           });
     } catch (e) {
       showSnackBar(context, e.toString());

@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:second/models/product.dart';
+import 'package:second/providers/user_provider.dart';
 import 'package:second/services/auth_service.dart';
 import 'package:second/widgets/app_bar.dart';
 import 'package:second/widgets/large_text.dart';
 import 'package:second/widgets/nav_drawer.dart';
-
 import 'pages/add_product.dart';
 import 'pages/single_product.dart';
 import 'widgets/medium_text.dart';
 import 'widgets/price_text.dart';
 
 void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: const MyApp(),
-    theme: ThemeData(fontFamily: "Inter"),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+      )
+    ],
+    child: MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const MyApp(),
+      theme: ThemeData(fontFamily: "Inter"),
+    ),
   ));
 }
 
@@ -121,19 +129,14 @@ class _MyAppState extends State<MyApp> {
         height: 55,
         child: FittedBox(
           child: FloatingActionButton(
-              backgroundColor: const Color(0xFF9DA53F),
-              child: const Text(
-                "Add Products",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500),
-              ),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const AddProduct()));
-              }),
+            backgroundColor: const Color(0xFF9DA53F),
+            tooltip: "Add Poducts",
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const AddProduct()));
+            },
+            child: const Icon(Icons.add, size: 30, color: Colors.white),
+          ),
         ),
       ),
     );

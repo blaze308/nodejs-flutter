@@ -1,7 +1,7 @@
 const express = require("express");
 const User = require("../models/user");
 const bcrypt = require("bcrypt")
-const Product = require("../models/product")
+const { Product } = require("../models/product")
 const jwt = require("jsonwebtoken")
 
 const authRouter = express.Router();
@@ -62,11 +62,11 @@ authRouter.post("/api/signup", async (req, res) => {
 //login route
 authRouter.post("/api/login", async (req, res) => {
     try {
-        const {username, email, password} = req.body;
+        const {identifier, password} = req.body;
 
         // const user = await User.findOne({email})
         // const userwithName = await User.findOne({username})
-        const user = await User.findOne({ $or: [{ email }, { username }] });
+        const user = await User.findOne({ $or: [{ email: identifier }, { username: identifier }] });
         if(!user) {
             return res.status(400).json({msg: "User with this username or email does not exist"})
         }

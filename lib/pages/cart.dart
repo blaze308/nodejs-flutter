@@ -4,6 +4,7 @@ import '../widgets/medium_text.dart';
 import '../widgets/nav_drawer.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/price_text.dart';
+import 'package:badges/badges.dart' as badges;
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -38,14 +39,14 @@ class _CartState extends State<Cart> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: Image.asset(
-                                  "assets/images/img.jpg",
-                                  width: 80,
-                                  height: 60,
-                                  fit: BoxFit.cover,
-                                )),
+                            // ClipRRect(
+                            //     borderRadius: BorderRadius.circular(5),
+                            //     child: Image.asset(
+                            //       "assets/images/img.jpg",
+                            //       width: 80,
+                            //       height: 60,
+                            //       fit: BoxFit.cover,
+                            //     )),
                             SizedBox(
                               width: 100,
                               child: Padding(
@@ -70,11 +71,16 @@ class _CartState extends State<Cart> {
                                   onPressed: () {},
                                   icon: const Icon(Icons.remove_circle,
                                       color: Colors.redAccent, size: 25)),
-                              // const Badge(
-                              //   child: Icon(Icons.shopping_cart,
-                              //       color: Colors.blueGrey),
-                              // ),
-                              const Text("10"),
+                              const badges.Badge(
+                                badgeContent: Text("3"),
+                                badgeStyle:
+                                    badges.BadgeStyle(badgeColor: Colors.white),
+                                child: Icon(
+                                  Icons.shopping_cart,
+                                  color: Colors.blue,
+                                  size: 30,
+                                ),
+                              ),
                               IconButton(
                                   onPressed: () {},
                                   icon: const Icon(Icons.add_circle,

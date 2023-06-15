@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:second/providers/user_provider.dart';
 import 'package:second/services/auth_service.dart';
 import '../widgets/large_text.dart';
 import '../widgets/nav_drawer.dart';
@@ -31,10 +33,13 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   void loginUser() {
+    String email = _emailController.text;
+    String username = _usernameController.text;
+
+    String identifier = username.isNotEmpty ? username : email;
     authService.loginUser(
         context: context,
-        email: _emailController.text,
-        username: _usernameController.text,
+        identifier: identifier,
         password: _passwordController.text);
   }
 
@@ -54,6 +59,7 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
     const opVal = 0.8;
     return Container(
         decoration: const BoxDecoration(
@@ -129,6 +135,8 @@ class _AuthPageState extends State<AuthPage> {
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return "enter valid username or email";
+                                    } else {
+                                      return null;
                                     }
                                   },
                                   controller: _usernameController,
@@ -153,6 +161,8 @@ class _AuthPageState extends State<AuthPage> {
                                         value.isEmpty ||
                                         value.length < 6) {
                                       return "invalid input";
+                                    } else {
+                                      return null;
                                     }
                                   },
                                   obscureText: true,
@@ -185,6 +195,7 @@ class _AuthPageState extends State<AuthPage> {
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
                                   loginUser();
+                                  print(user.toJson());
                                 }
                               },
                               style: ElevatedButton.styleFrom(

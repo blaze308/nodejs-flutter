@@ -10,6 +10,7 @@ const port = 7000
 app.use(express.json())
 app.use(authRouter);
 
+
 //connnections
 mongoose.connect(DB).then(() => {
     console.log("Connection Successful");
