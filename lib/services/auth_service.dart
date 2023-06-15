@@ -80,6 +80,67 @@ class AuthService {
     }
   }
 
+  void getUserData(
+    BuildContext context,
+  ) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString("tokenKey");
+
+      if (token == null) {
+        prefs.setString("tokenKey", "");
+      }
+
+      var tokenRes = await http.post(
+        Uri.parse("http://192.168.100.20:7000/api/tokenvalidate"),
+        headers: <String, String>{
+          "Content-Type": "application/json; charset=UTF-8",
+          "tokenKey": token!
+        },
+      );
+
+      var response = jsonDecode(tokenRes.body);
+
+      if (response == true) {
+        http.Response userRes = await http.get(
+          Uri.parse("http://192.168.100.20:7000/api/account"),
+          headers: <String, String>{
+            "Content-Type": "application/json; charset=UTF-8",
+            "tokenKey": token
+          },
+        );
+
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setUser(userRes.body);
+      }
+
+      // http.Response res = await http.post(
+      //     Uri.parse("http://192.168.100.20:7000/api/login"),
+      //     headers: <String, String>{
+      //       "Content-Type": "application/json; charset=UTF-8"
+      //     },
+      //     body: jsonEncode({
+      //       "identifier": identifier,
+      //       "password": password,
+      //     }));
+
+      // // ignore: use_build_context_synchronously
+      // httpErrorHandler(
+      //     response: res,
+      //     context: context,
+      //     onSuccess: () async {
+      //       SharedPreferences prefs = await SharedPreferences.getInstance();
+      //       Provider.of<UserProvider>(context, listen: false).setUser(res.body);
+      //       await prefs.setString("tokenKey", jsonDecode(res.body)["token"]);
+      //       Navigator.of(context)
+      //           .push(MaterialPageRoute(builder: (context) => const MyApp()));
+      //       showSnackBar(context, "You are now logged in");
+      //     });
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
   Future fetchData() async {
     try {
       http.Response res = await http.get(

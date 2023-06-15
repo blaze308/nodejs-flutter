@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:second/services/auth_service.dart';
 import 'package:second/widgets/app_bar.dart';
 import 'package:second/widgets/large_text.dart';
 import 'package:second/widgets/nav_drawer.dart';
@@ -15,6 +16,13 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
+  final AuthService authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final picker = ImagePicker();
   File? imageFile;
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:second/services/auth_service.dart';
 import 'package:second/widgets/app_bar.dart';
 
 import '../widgets/nav_drawer.dart';

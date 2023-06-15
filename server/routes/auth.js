@@ -2,7 +2,8 @@ const express = require("express");
 const User = require("../models/user");
 const bcrypt = require("bcrypt")
 const { Product } = require("../models/product")
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const auth = require("../middleware/auth");
 
 const authRouter = express.Router();
 
@@ -86,6 +87,28 @@ authRouter.post("/api/login", async (req, res) => {
     } catch (error) {
         res.status(500).json({error: error.message});
     }
+})
+
+authRouter.post("/api/tokenvalidate", async (req, res) => {
+    try {
+        const token = req.header("tokenKey");
+        if(!token) return res.json(false)
+
+        const verified = jwt.verify(token, "passwordKey")
+        if(!verified) return res.json(false)
+
+        const user = await User.findById(verified.id);
+        if(!user)  return res.json(false)
+        res.json(true);
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+})
+
+//get user data
+authRouter.get("/api/account", auth, async (req, res) => {
+    const user = await User.findById(req.user);
+    res.json({...user._doc, token: req.token});
 })
 
 module.exports = authRouter;

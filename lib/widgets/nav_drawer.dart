@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:second/providers/user_provider.dart';
+import 'package:second/widgets/snackbar.dart';
 import '../main.dart';
 import '../pages/auth.dart';
 import '../pages/cart.dart';
 import '../pages/my_account.dart';
+import '../services/auth_service.dart';
 import 'large_text.dart';
 
-class NavDrawer extends StatelessWidget {
+class NavDrawer extends StatefulWidget {
   const NavDrawer({
     super.key,
   });
+
+  @override
+  State<NavDrawer> createState() => _NavDrawerState();
+}
+
+class _NavDrawerState extends State<NavDrawer> {
+  final AuthService authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+    authService.getUserData(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,9 +74,26 @@ class NavDrawer extends StatelessWidget {
                     leading: const Icon(Icons.person,
                         color: Colors.black54, size: 35),
                     onTap: () {
-                      Navigator.pop(context);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const MyAccount()));
+                      if (Provider.of<UserProvider>(context, listen: false)
+                          .user
+                          .token
+                          .isNotEmpty) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const MyAccount()));
+                      } else {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const MyApp()));
+                        showSnackBar(context, "login to access your account");
+                      }
+
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //     builder: (context) =>
+                      //         Provider.of<UserProvider>(context)
+                      //                 .user
+                      //                 .token
+                      //                 .isNotEmpty
+                      //             ? const MyAccount()
+                      //             : const MyApp()));
                     },
                     minLeadingWidth: 0,
                     title: LargeText(text: "My Account")),
