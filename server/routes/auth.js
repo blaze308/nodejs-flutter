@@ -12,6 +12,7 @@ const authRouter = express.Router();
 //get all products 
 authRouter.get("/api/data", async (req, res) => {
     try {
+        //reverse sort
         const products = await Product.find().sort({_id : -1});
         res.json(products)
     } catch (error) {
@@ -86,6 +87,76 @@ authRouter.post("/api/login", async (req, res) => {
     }
 })
 
+//change user type to admin
+// authRouter.post("/api/admin/signup", async (req, res) => {
+//     try {
+//      const {username, email, password } = req.body;
+ 
+//      const existingUser = await User.findOne({ $or: [{ email: email }, { username: username }] });
+//      if(existingUser) {
+//         let user = await User.findOneAndUpdate({id: existingUser._id}, { $or: [{ email: email }, { username: username }] })
+        
+//         const isMatch = bcrypt.compare(password, user.password)
+
+
+//         if(!isMatch){
+//             return res.status(400).json({msg: "Incorrect password"})
+//         }
+
+//         user = new User({
+//               email,
+//               username,
+//               type: "admin",
+//               password: hashedPassword,
+//             })
+            
+//             user = await user.save();
+//             res.json(user);
+//         }
+
+//         else {
+//             res.status(400).json({msg: "no user found"})
+//         }
+ 
+//     } catch (error) {
+//          res.status(500).json({error: error.message})
+//     }
+ 
+//  });
+ 
+//signup admin
+authRouter.post("/api/admin/signup", async (req, res) => {
+    try {
+     const {username, email, password } = req.body;
+ 
+     const existingUser = await User.findOne({email})
+     if (existingUser) {
+         return res.status(400).json({msg : "user with same email already exists"})
+     }
+     
+     const existingUserName = await User.findOne({username})
+     if (existingUserName) {
+         return res.status(400).json({msg : "user with same username already exists"})
+     }
+ 
+     const hashedPassword = await bcrypt.hash(password, 8)
+ 
+     let user = new User({
+          email,
+          username,
+          type: "admin",
+          password: hashedPassword,
+     })
+ 
+     user = await user.save();
+     res.json(user);
+    } catch (error) {
+         res.status(500).json({error: error.message})
+    }
+ 
+ });
+ 
+
 
 //token validator
 authRouter.post("/api/tokenvalidate", async (req, res) => {
@@ -110,5 +181,7 @@ authRouter.get("/api/account", auth, async (req, res) => {
     const user = await User.findById(req.user);
     res.json({...user._doc, token: req.token});
 })
+
+
 
 module.exports = authRouter;

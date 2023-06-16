@@ -49,6 +49,43 @@ class AuthService {
     }
   }
 
+  void signupAdmin({
+    required BuildContext context,
+    required String email,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      User user = User(
+        id: "",
+        email: email,
+        username: username,
+        password: password,
+        address: "",
+        token: "",
+        type: "",
+      );
+
+      http.Response res = await http.post(
+          Uri.parse("http://192.168.100.20:7000/api/admin/signup"),
+          headers: <String, String>{
+            "Content-Type": "application/json; charset=UTF-8"
+          },
+          body: user.toJson());
+
+      httpErrorHandler(
+        response: res,
+        context: context,
+        onSuccess: () {
+          showSnackBar(
+              context, "Admin Account created. Login in with same credentials");
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
   void loginUser({
     required BuildContext context,
     required String identifier,
@@ -73,9 +110,11 @@ class AuthService {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             Provider.of<UserProvider>(context, listen: false).setUser(res.body);
             await prefs.setString("tokenKey", jsonDecode(res.body)["token"]);
+
+            var type = jsonDecode(res.body)["type"];
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) => const MyApp()));
-            showSnackBar(context, "You are now logged in");
+            showSnackBar(context, "You are now logged in as $type");
           });
     } catch (e) {
       showSnackBar(context, e.toString());
@@ -115,29 +154,6 @@ class AuthService {
         var userProvider = Provider.of<UserProvider>(context, listen: false);
         userProvider.setUser(userRes.body);
       }
-
-      // http.Response res = await http.post(
-      //     Uri.parse("http://192.168.100.20:7000/api/login"),
-      //     headers: <String, String>{
-      //       "Content-Type": "application/json; charset=UTF-8"
-      //     },
-      //     body: jsonEncode({
-      //       "identifier": identifier,
-      //       "password": password,
-      //     }));
-
-      // // ignore: use_build_context_synchronously
-      // httpErrorHandler(
-      //     response: res,
-      //     context: context,
-      //     onSuccess: () async {
-      //       SharedPreferences prefs = await SharedPreferences.getInstance();
-      //       Provider.of<UserProvider>(context, listen: false).setUser(res.body);
-      //       await prefs.setString("tokenKey", jsonDecode(res.body)["token"]);
-      //       Navigator.of(context)
-      //           .push(MaterialPageRoute(builder: (context) => const MyApp()));
-      //       showSnackBar(context, "You are now logged in");
-      //     });
     } catch (e) {
       showSnackBar(context, e.toString());
     }

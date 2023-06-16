@@ -74,10 +74,7 @@ class _NavDrawerState extends State<NavDrawer> {
                     leading: const Icon(Icons.person,
                         color: Colors.black54, size: 35),
                     onTap: () {
-                      if (Provider.of<UserProvider>(context, listen: false)
-                          .user
-                          .token
-                          .isNotEmpty) {
+                      if (user.token.isNotEmpty) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => const MyAccount()));
                       } else {
@@ -98,17 +95,30 @@ class _NavDrawerState extends State<NavDrawer> {
                     minLeadingWidth: 0,
                     title: LargeText(text: "My Account")),
                 const SizedBox(height: 10),
-                ListTile(
-                    titleAlignment: ListTileTitleAlignment.center,
-                    leading: const Icon(Icons.login,
-                        color: Colors.black54, size: 35),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const AuthPage()));
-                    },
-                    minLeadingWidth: 0,
-                    title: LargeText(text: "Login")),
+                if (user.token.isNotEmpty)
+                  ListTile(
+                      titleAlignment: ListTileTitleAlignment.center,
+                      leading: const Icon(Icons.logout,
+                          color: Colors.black54, size: 35),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const MyApp()));
+                      },
+                      minLeadingWidth: 0,
+                      title: LargeText(text: "Logout")),
+                if (user.token.isEmpty)
+                  ListTile(
+                      titleAlignment: ListTileTitleAlignment.center,
+                      leading: const Icon(Icons.login,
+                          color: Colors.black54, size: 35),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const AuthPage()));
+                      },
+                      minLeadingWidth: 0,
+                      title: LargeText(text: "Login")),
               ],
             ),
           ),

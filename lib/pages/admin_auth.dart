@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:second/providers/admin_provider.dart';
-import 'package:second/services/admin_service.dart';
+import 'package:second/services/auth_service.dart';
 import 'package:second/widgets/app_bar.dart';
 import 'package:second/widgets/nav_drawer.dart';
 
@@ -23,10 +21,10 @@ class _AdminAuthState extends State<AdminAuth> {
   bool showLoginForm = true;
   bool showSignupForm = false;
 
-  final AdminAuthService adminAuthService = AdminAuthService();
+  final AuthService authService = AuthService();
 
   void signupAdmin() {
-    adminAuthService.signupAdmin(
+    authService.signupAdmin(
       context: context,
       email: _emailController.text,
       username: _usernameController.text,
@@ -34,15 +32,16 @@ class _AdminAuthState extends State<AdminAuth> {
     );
   }
 
-  void loginAdmin() {
+  void loginUser() {
     String email = _emailController.text;
     String username = _usernameController.text;
     String identifier = username.isNotEmpty ? username : email;
 
-    adminAuthService.loginAdmin(
-        context: context,
-        identifier: identifier,
-        password: _passwordController.text);
+    authService.loginUser(
+      context: context,
+      identifier: identifier,
+      password: _passwordController.text,
+    );
   }
 
   void showLoginFormOnly() {
@@ -193,7 +192,7 @@ class _AdminAuthState extends State<AdminAuth> {
                           ElevatedButton(
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                loginAdmin();
+                                loginUser();
                                 // print(admin.toJson());
                               }
                             },

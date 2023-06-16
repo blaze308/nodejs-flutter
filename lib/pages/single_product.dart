@@ -45,59 +45,62 @@ class _SingleProductState extends State<SingleProduct> {
                 textStyle:
                     const TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 10),
-                child: PriceText(
-                  text: "GHC ${widget.snapshot.data[widget.index]["price"]}"
-                      .toString(),
-                  textStyle: const TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF869013)),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 10),
+                  child: PriceText(
+                    text: "GHC ${widget.snapshot.data[widget.index]["price"]}"
+                        .toString(),
+                    textStyle: const TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF869013)),
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.remove_circle,
-                              color: Colors.redAccent, size: 25)),
-                      const badges.Badge(
-                        badgeContent: Text("3"),
-                        badgeStyle: badges.BadgeStyle(badgeColor: Colors.white),
-                        child: Icon(
-                          Icons.shopping_cart,
-                          color: Colors.blue,
-                          size: 30,
+                Expanded(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.remove_circle,
+                                color: Colors.redAccent, size: 25)),
+                        const badges.Badge(
+                          badgeContent: Text("3"),
+                          badgeStyle:
+                              badges.BadgeStyle(badgeColor: Colors.white),
+                          child: Icon(
+                            Icons.shopping_cart,
+                            color: Colors.blue,
+                            size: 30,
+                          ),
                         ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.add_circle,
+                                color: Colors.greenAccent, size: 25)),
+                      ]),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF57FD5E),
+                        fixedSize: const Size(100, 20),
                       ),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.add_circle,
-                              color: Colors.greenAccent, size: 25)),
-                    ]),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF57FD5E),
-                      fixedSize: const Size(100, 20),
-                    ),
-                    child: const Text(
-                      "Add to Cart",
-                      style: TextStyle(fontSize: 12),
-                    )),
-              ),
-            ],
+                      child: const Text(
+                        "Add to Cart",
+                        style: TextStyle(fontSize: 12),
+                      )),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             width: double.maxFinite,

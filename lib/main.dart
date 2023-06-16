@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:second/models/product.dart';
-import 'package:second/pages/admin_auth_service.dart';
-import 'package:second/providers/admin_provider.dart';
+import 'package:second/pages/add_product.dart';
+import 'package:second/pages/admin_auth.dart';
 import 'package:second/providers/user_provider.dart';
 import 'package:second/services/auth_service.dart';
 import 'package:second/widgets/app_bar.dart';
@@ -16,7 +16,6 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => UserProvider()),
-      ChangeNotifierProvider(create: (context) => AdminProvider())
     ],
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -37,6 +36,7 @@ class _MyAppState extends State<MyApp> {
   AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: const MyAppBar(),
       drawer: const NavDrawer(),
@@ -133,7 +133,7 @@ class _MyAppState extends State<MyApp> {
             tooltip: "Add Poducts",
             onPressed: () {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const AdminAuth()));
+                  MaterialPageRoute(builder: (context) => const AddProduct()));
             },
             child: const Icon(Icons.add, size: 30, color: Colors.white),
           ),
