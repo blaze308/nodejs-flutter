@@ -9,7 +9,7 @@ const authRouter = express.Router();
 
 
 
-//get 
+//get all products 
 authRouter.get("/api/data", async (req, res) => {
     try {
         const products = await Product.find().sort({_id : -1});
@@ -19,7 +19,7 @@ authRouter.get("/api/data", async (req, res) => {
     }
 })
 
-//get by category
+//get products by category
 authRouter.get("/api/data/category/:category", async (req, res) => {
     try {
         const products = await Product.find({category: req.params.category});
@@ -29,7 +29,8 @@ authRouter.get("/api/data/category/:category", async (req, res) => {
     }
 })
 
-//signup
+
+//signup user
 authRouter.post("/api/signup", async (req, res) => {
    try {
     const {username, email, password} = req.body;
@@ -60,7 +61,7 @@ authRouter.post("/api/signup", async (req, res) => {
 
 });
 
-//login route
+//login user
 authRouter.post("/api/login", async (req, res) => {
     try {
         const {identifier, password} = req.body;
@@ -71,10 +72,6 @@ authRouter.post("/api/login", async (req, res) => {
         if(!user) {
             return res.status(400).json({msg: "User with this username or email does not exist"})
         }
-
-        // if(!userwithName) {
-        //     return res.status(400).json({msg: "User with this username does not exist"})
-        // }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
@@ -89,6 +86,8 @@ authRouter.post("/api/login", async (req, res) => {
     }
 })
 
+
+//token validator
 authRouter.post("/api/tokenvalidate", async (req, res) => {
     try {
         const token = req.header("tokenKey");
@@ -104,6 +103,7 @@ authRouter.post("/api/tokenvalidate", async (req, res) => {
         res.status(500).json({error: error.message});
     }
 })
+
 
 //get user data
 authRouter.get("/api/account", auth, async (req, res) => {

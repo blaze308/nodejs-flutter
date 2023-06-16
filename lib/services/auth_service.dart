@@ -20,13 +20,14 @@ class AuthService {
   }) async {
     try {
       User user = User(
-          id: "",
-          email: email,
-          username: username,
-          password: password,
-          address: "",
-          token: "",
-          type: "");
+        id: "",
+        email: email,
+        username: username,
+        password: password,
+        address: "",
+        token: "",
+        type: "",
+      );
 
       http.Response res = await http.post(
           Uri.parse("http://192.168.100.20:7000/api/signup"),
@@ -36,12 +37,13 @@ class AuthService {
           body: user.toJson());
 
       httpErrorHandler(
-          response: res,
-          context: context,
-          onSuccess: () {
-            showSnackBar(
-                context, "Account created. Login in with same credentials");
-          });
+        response: res,
+        context: context,
+        onSuccess: () {
+          showSnackBar(
+              context, "Account created. Login in with same credentials");
+        },
+      );
     } catch (e) {
       showSnackBar(context, e.toString());
     }

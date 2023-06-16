@@ -26,17 +26,18 @@ class _AuthPageState extends State<AuthPage> {
 
   void signupUser() {
     authService.signupUser(
-        context: context,
-        email: _emailController.text,
-        username: _usernameController.text,
-        password: _passwordController.text);
+      context: context,
+      email: _emailController.text,
+      username: _usernameController.text,
+      password: _passwordController.text,
+    );
   }
 
   void loginUser() {
     String email = _emailController.text;
     String username = _usernameController.text;
-
     String identifier = username.isNotEmpty ? username : email;
+
     authService.loginUser(
         context: context,
         identifier: identifier,
