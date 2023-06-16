@@ -107,18 +107,18 @@ class _NavDrawerState extends State<NavDrawer> {
                       },
                       minLeadingWidth: 0,
                       title: LargeText(text: "Logout")),
-                if (user.token.isEmpty)
-                  ListTile(
-                      titleAlignment: ListTileTitleAlignment.center,
-                      leading: const Icon(Icons.login,
-                          color: Colors.black54, size: 35),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const AuthPage()));
-                      },
-                      minLeadingWidth: 0,
-                      title: LargeText(text: "Login")),
+                // if (user.token.isEmpty)
+                ListTile(
+                    titleAlignment: ListTileTitleAlignment.center,
+                    leading: const Icon(Icons.login,
+                        color: Colors.black54, size: 35),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AuthPage()));
+                    },
+                    minLeadingWidth: 0,
+                    title: LargeText(text: "Login")),
               ],
             ),
           ),

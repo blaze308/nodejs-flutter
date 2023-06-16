@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:second/main.dart';
+import 'package:second/models/product.dart';
 import 'package:second/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:second/providers/user_provider.dart';
@@ -27,6 +28,7 @@ class AuthService {
         address: "",
         token: "",
         type: "",
+        cart: [],
       );
 
       http.Response res = await http.post(
@@ -64,6 +66,7 @@ class AuthService {
         address: "",
         token: "",
         type: "",
+        cart: [],
       );
 
       http.Response res = await http.post(
@@ -193,6 +196,32 @@ class AuthService {
       // print(data);
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  void addtoCart(
+      {required BuildContext context, required Product product}) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res =
+          await http.post(Uri.parse("http://192.168.100.20:7000/api/addtocart"),
+              headers: {
+                "Content-Type": "application/json; charset=UTF-8",
+                "tokenKey": userProvider.user.token
+              },
+              body: jsonEncode({"id": product.id}));
+
+      httpErrorHandler(
+          response: res,
+          context: context,
+          onSuccess: () {
+            User user =
+                userProvider.user.copyWith(cart: jsonDecode(res.body)["cart"]);
+            userProvider.setUserFromModel(user);
+          });
+    } catch (e) {
+      showSnackBar(context, e.toString());
     }
   }
 }

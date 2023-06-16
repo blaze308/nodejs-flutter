@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:second/models/product.dart';
+import 'package:second/providers/user_provider.dart';
 import 'package:second/services/auth_service.dart';
 import '../widgets/large_text.dart';
 import '../widgets/medium_text.dart';
@@ -17,12 +20,17 @@ class SingleProduct extends StatefulWidget {
 
 class _SingleProductState extends State<SingleProduct> {
   AuthService authService = AuthService();
+
+  Product product = Product();
+  void addtoCart() {
+    AuthService().addtoCart(context: context, product: product);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final cartLength = context.watch<UserProvider>().user.cart.length;
     return Scaffold(
       appBar: const MyAppBar(),
-      // appBar: AppBar(),
-      // drawer: const NavDrawer(),
       body: ListView(
         children: [
           SizedBox(
@@ -45,7 +53,8 @@ class _SingleProductState extends State<SingleProduct> {
                 textStyle:
                     const TextStyle(fontWeight: FontWeight.w500, fontSize: 18)),
           ),
-          Expanded(
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,35 +70,32 @@ class _SingleProductState extends State<SingleProduct> {
                         color: Color(0xFF869013)),
                   ),
                 ),
-                Expanded(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.remove_circle,
-                                color: Colors.redAccent, size: 25)),
-                        const badges.Badge(
-                          badgeContent: Text("3"),
-                          badgeStyle:
-                              badges.BadgeStyle(badgeColor: Colors.white),
-                          child: Icon(
-                            Icons.shopping_cart,
-                            color: Colors.blue,
-                            size: 30,
-                          ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.remove_circle,
+                              color: Colors.redAccent, size: 25)),
+                      badges.Badge(
+                        badgeContent: Text(cartLength.toString()),
+                        badgeStyle: badges.BadgeStyle(badgeColor: Colors.white),
+                        child: const Icon(
+                          Icons.shopping_cart,
+                          color: Colors.blue,
+                          size: 30,
                         ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.add_circle,
-                                color: Colors.greenAccent, size: 25)),
-                      ]),
-                ),
+                      ),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.add_circle,
+                              color: Colors.greenAccent, size: 25)),
+                    ]),
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: addtoCart,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF57FD5E),
                         fixedSize: const Size(100, 20),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:second/models/product.dart';
 import 'package:second/pages/add_product.dart';
-import 'package:second/pages/admin_auth.dart';
 import 'package:second/providers/user_provider.dart';
 import 'package:second/services/auth_service.dart';
 import 'package:second/widgets/app_bar.dart';
@@ -40,89 +39,94 @@ class _MyAppState extends State<MyApp> {
     return Scaffold(
       appBar: const MyAppBar(),
       drawer: const NavDrawer(),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 20, left: 10),
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: LargeText(text: "Awesome Products to use in Eternity")),
-          ),
-          FutureBuilder(
-            future: authService.fetchData(),
-            builder: (context, AsyncSnapshot snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                    child: CircularProgressIndicator.adaptive());
-              } else if (snapshot.hasData) {
-                return Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200,
-                        crossAxisSpacing: 15,
-                        childAspectRatio: 2 / 2.8,
-                        mainAxisSpacing: 15,
-                      ),
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) => GestureDetector(
-                            onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => SingleProduct(
-                                        snapshot: snapshot, index: index))),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: const [
-                                    BoxShadow(color: Colors.grey, blurRadius: 2)
-                                  ]),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: MediumText(
-                                            text: Product.fromJson(
-                                                    snapshot.data[index])
-                                                .title
-                                                .toString())),
-                                  ),
-                                  SizedBox(
-                                    height: 150,
-                                    width: double.maxFinite,
-                                    child: Image.network(
-                                      Product.fromJson(snapshot.data[index])
-                                          .image!,
-                                      fit: BoxFit.cover,
+      body: GestureDetector(
+        // onTap: ,
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 20, left: 10),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child:
+                      LargeText(text: "Awesome Products to use in Eternity")),
+            ),
+            FutureBuilder(
+              future: authService.fetchData(),
+              builder: (context, AsyncSnapshot snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                      child: CircularProgressIndicator.adaptive());
+                } else if (snapshot.hasData) {
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          crossAxisSpacing: 15,
+                          childAspectRatio: 2 / 2.8,
+                          mainAxisSpacing: 15,
+                        ),
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (context, index) => GestureDetector(
+                              onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => SingleProduct(
+                                          snapshot: snapshot, index: index))),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                          color: Colors.grey, blurRadius: 2)
+                                    ]),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: MediumText(
+                                              text: Product.fromJson(
+                                                      snapshot.data[index])
+                                                  .title
+                                                  .toString())),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: PriceText(
-                                          text:
-                                              "GHC ${Product.fromJson(snapshot.data[index]).price.toString()}"),
+                                    SizedBox(
+                                      height: 150,
+                                      width: double.maxFinite,
+                                      child: Image.network(
+                                        Product.fromJson(snapshot.data[index])
+                                            .image!,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                  )
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: PriceText(
+                                            text:
+                                                "GHC ${Product.fromJson(snapshot.data[index]).price.toString()}"),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          )),
-                );
-              } else {
-                return Center(child: MediumText(text: "Data not Found"));
-              }
-            },
-          ),
-        ],
+                            )),
+                  );
+                } else {
+                  return Center(child: MediumText(text: "Data not Found"));
+                }
+              },
+            ),
+          ],
+        ),
       ),
       floatingActionButton: SizedBox(
         width: 55,

@@ -1,4 +1,5 @@
 class Product {
+  String? id;
   String? title;
   String? image;
   double? price;
